@@ -1,0 +1,19 @@
+.country {
+  // display: flex;
+  position: relative;
+  outline: 1px solid aqua;
+  width: 70%;
+  margin: 0 auto;
+  background-color: beige;
+}
+
+.country-title {
+  text-align: center;
+}
+
+.country-img img {
+  width: 200px;
+  position: absolute;
+  left: 30%;
+  top: 25%;
+}
