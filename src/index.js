@@ -1,78 +1,40 @@
 import debounce from 'lodash.debounce';
 import { error, Stack } from '@pnotify/core';
+import '@pnotify/core/dist/BrightTheme.css';
 import './sass/main.scss';
 import countryCardTpl from './templates/country-card.hbs';
 import countriesListTpl from './templates/countries-list.hbs';
-import '@pnotify/core/dist/BrightTheme.css';
 import API from './js/fetchCountries';
 
 const cardContainer = document.querySelector('.js-card-container');
 const searchForm = document.querySelector('.form-control');
 
-// console.log('Это поиск стран');
-
-// -------хочу получить массив всех стран------
-
-// function fetchAllCountry() {
-//     return fetch('https://restcountries.eu/rest/v2/all').then(response => {
-//     return response.json();
-//     })
-// }
-// fetchAllCountry()
-//     .then(response => {
-//         // console.log(response); //массив объектов
-//         // console.log(...response); //норм не массив объектов, а просто объекты стран
-//         const arrCountry = [...response]; // массив объектов
-//         console.log(arrCountry);
-//         return arrCountry;
-//     })
-//     .catch(error => {
-//         console.log(error);
-//     });  
-
 
 // ------- ищем в массиве нужные страны--------
 
-searchForm.addEventListener('input', debounce(onSearch, 1000));
+searchForm.addEventListener('input', debounce(onSearch, 500));
 
 function onSearch(e) {
-//   e.preventDefault();
-
-cardContainer.innerHTML = '';
+    cardContainer.innerHTML = '';
 //   const form = e.currentTarget; меняю на target чтобы дебаунс срабатывал
     const form = e.target;
     const searchQuery = form.value;
     console.log(searchQuery);
-    // console.log(arrCountry);
 
     API.fetchCountries(searchQuery)
-        .then(renderCountryCard)
+        .then(renderMarkup)
         .catch(onFetchError)
-        // .finally(() => form.reset());  //не срабатывает
-        // .finally(() => searchForm.reset());
 }
 
-// function fetchCountry(countryName) {
-//     return fetch(`https://restcountries.eu/rest/v2/name/${countryName}`).then(response => {
-//     return response.json();
-//     })
-// }
-
-function renderCountryCard(countries) {
+function renderMarkup(countries) {
     console.log(...countries);
     if (countries.length === 1) {
-        const markupCountry = countryCardTpl(...countries);
-        cardContainer.innerHTML = markupCountry;
-        // searchForm.reset();
-        // тоже не срабатывает 
+        renderCountryCard(countries);
     }
 
     if (countries.length >= 2 && countries.length <= 10) {
-    // ----- в консоль дает массив подходящих стран
         // -----через шаблон
-        const markup = countriesListTpl(countries);
-        cardContainer.innerHTML = markup;
-    // console.log(markup);
+        renderCountriesList(countries);
     
     // --------варик без шаблона
     // const markup = countries.map(country => `<li>${country.name}</li>`).join('');
@@ -81,9 +43,25 @@ function renderCountryCard(countries) {
     
     if (countries.length > 10) {
         console.log(`Опасность!!!Слишком много стран ${countries.length} подходит под ваш запрос. Сделайте его более специфичным!!!`);
-        // getErrorMessage();
-        // cardContainer.innerHTML = '';
-        error({
+        getErrorMessage();
+    }
+}
+
+function onFetchError (errorMassage) {
+    console.log('error');
+};
+function renderCountryCard(countries) {
+    const markupCountry = countryCardTpl(...countries);
+        cardContainer.innerHTML = markupCountry;
+}
+
+function renderCountriesList(countries) {
+    const markupList = countriesListTpl(countries);
+    cardContainer.innerHTML = markupList;
+}
+
+function getErrorMessage() {
+     error({
             text: 'Too many matches found. Please enter a more specific query!',
             width: '500px',
             delay: 2000,
@@ -95,10 +73,4 @@ function renderCountryCard(countries) {
             firstpos1: 190, firstpos2: 50
         })     
         })
-    }
 }
-
-
-function onFetchError (errorMassage) {
-    console.log('error');
-};
