@@ -7,19 +7,14 @@ import countriesListTpl from './templates/countries-list.hbs';
 import API from './js/fetchCountries';
 
 const cardContainer = document.querySelector('.js-card-container');
-const searchForm = document.querySelector('.form-control');
-
-
-// ------- ищем в массиве нужные страны--------
+const searchForm = document.querySelector('.search-input');
 
 searchForm.addEventListener('input', debounce(onSearch, 500));
 
 function onSearch(e) {
     cardContainer.innerHTML = '';
-//   const form = e.currentTarget; меняю на target чтобы дебаунс срабатывал
     const form = e.target;
     const searchQuery = form.value;
-    console.log(searchQuery);
 
     API.fetchCountries(searchQuery)
         .then(renderMarkup)
@@ -27,22 +22,15 @@ function onSearch(e) {
 }
 
 function renderMarkup(countries) {
-    console.log(...countries);
+    // console.log(...countries);
     if (countries.length === 1) {
         renderCountryCard(countries);
     }
-
     if (countries.length >= 2 && countries.length <= 10) {
-        // -----через шаблон
         renderCountriesList(countries);
-    
-    // --------варик без шаблона
-    // const markup = countries.map(country => `<li>${country.name}</li>`).join('');
-    // cardContainer.innerHTML = markup;
     }
-    
     if (countries.length > 10) {
-        console.log(`Опасность!!!Слишком много стран ${countries.length} подходит под ваш запрос. Сделайте его более специфичным!!!`);
+        // console.log(`Опасность!!!Слишком много стран ${countries.length} подходит под ваш запрос. Сделайте его более специфичным!!!`);
         getErrorMessage();
     }
 }
@@ -50,6 +38,7 @@ function renderMarkup(countries) {
 function onFetchError (errorMassage) {
     console.log('error');
 };
+
 function renderCountryCard(countries) {
     const markupCountry = countryCardTpl(...countries);
         cardContainer.innerHTML = markupCountry;

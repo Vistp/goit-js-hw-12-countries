@@ -1,19 +1,39 @@
 .country {
-  // display: flex;
-  position: relative;
-  outline: 1px solid aqua;
   width: 70%;
   margin: 0 auto;
-  background-color: beige;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: rgb(242, 224, 208);
+  border-radius: 15px;
 }
 
 .country-title {
+  margin: 0;
+  margin-bottom: 20px;
   text-align: center;
 }
 
+.country-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-evenly;
+}
+
+.country-body {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.country-body > li:not(:last-child) {
+  padding-bottom: 10px;
+}
+
+.languages-list {
+  list-style: disc;
+}
+
 .country-img img {
-  width: 200px;
-  position: absolute;
-  left: 30%;
-  top: 25%;
+  width: 400px;
+  display: block;
 }
