@@ -58,7 +58,7 @@ function fetchCountry(countryName) {
 }
 
 function renderCountryCard(countries) {
-    // console.log(...countries);
+    console.log(...countries);
     if (countries.length === 1) {
         const markupCountry = countryCardTpl(...countries);
         cardContainer.innerHTML = markupCountry;
@@ -68,13 +68,14 @@ function renderCountryCard(countries) {
 
     if (countries.length >= 2 && countries.length <= 10) {
     // ----- в консоль дает массив подходящих стран
-    //     const markup = countriesListTpl(...countries);
-    // cardContainer.innerHTML = markup;
+        // -----через шаблон
+        const markup = countriesListTpl(countries);
+        cardContainer.innerHTML = markup;
     // console.log(markup);
     
-    // countries.map(country => `<li>${county.name}</li>`).join('');
-    const markup = countries.map(country => `<li>${country.name}</li>`).join('');
-    cardContainer.innerHTML = markup;
+    // --------варик без шаблона
+    // const markup = countries.map(country => `<li>${country.name}</li>`).join('');
+    // cardContainer.innerHTML = markup;
     }
     
     if (countries.length > 10) {
@@ -82,47 +83,21 @@ function renderCountryCard(countries) {
         // getErrorMessage();
         // cardContainer.innerHTML = '';
         error({
-    text: 'Too many matches found. Please enter a more specific query!',
-    width: '500px',
-    delay: 2000,
-    sticker: false,
-    icon: false,
-    closer: false,
-    stack: new Stack({
-    dir1: 'down', dir2: 'left',
-    firstpos1: 190, firstpos2: 50
-  })     
-})
+            text: 'Too many matches found. Please enter a more specific query!',
+            width: '500px',
+            delay: 2000,
+            sticker: false,
+            icon: false,
+            closer: false,
+            stack: new Stack({
+            dir1: 'down', dir2: 'left',
+            firstpos1: 190, firstpos2: 50
+        })     
+        })
     }
-    }
-// function errorMessage() {
-//     error({
-//     text: 'Too many matches found. Please enter a more specific query!',
-//     width: '500px',
-//     delay: 2000,
-//     sticker: false,
-//     icon: false,
-//     closer: false,
-//     stack: new Stack({
-//     dir1: 'down', dir2: 'left',
-//     firstpos1: 190, firstpos2: 50 
-//   })     
-// })
-// } 
+}
 
-function onFetchError (error) {
+
+function onFetchError (errorMassage) {
     console.log('error');
 };
-
-
-
-// --------pnotify
-
-// PNotify.error({
-//   title: 'Desktop Error',
-//   text: 'Serious error is serious.',
-//   modules: new Map([
-//     ...PNotify.defaultModules,
-//     [PNotifyDesktop, {}]
-//   ])
-// });
