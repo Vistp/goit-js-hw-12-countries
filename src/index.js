@@ -1,8 +1,9 @@
 import debounce from 'lodash.debounce';
-// import errorMessage from 'pnotify'
+import { error, Stack } from '@pnotify/core';
 import './sass/main.scss';
 import countryCardTpl from './templates/country-card.hbs';
 import countriesListTpl from './templates/countries-list.hbs';
+import '@pnotify/core/dist/BrightTheme.css';
 
 const cardContainer = document.querySelector('.js-card-container');
 const searchForm = document.querySelector('.form-control');
@@ -11,11 +12,11 @@ const searchForm = document.querySelector('.form-control');
 
 // -------хочу получить массив всех стран------
 
-function fetchAllCountry() {
-    return fetch('https://restcountries.eu/rest/v2/all').then(response => {
-    return response.json();
-    })
-}
+// function fetchAllCountry() {
+//     return fetch('https://restcountries.eu/rest/v2/all').then(response => {
+//     return response.json();
+//     })
+// }
 // fetchAllCountry()
 //     .then(response => {
 //         // console.log(response); //массив объектов
@@ -34,8 +35,9 @@ function fetchAllCountry() {
 searchForm.addEventListener('input', debounce(onSearch, 1000));
 
 function onSearch(e) {
-  e.preventDefault();
+//   e.preventDefault();
 
+cardContainer.innerHTML = '';
 //   const form = e.currentTarget; меняю на target чтобы дебаунс срабатывал
     const form = e.target;
     const searchQuery = form.value;
@@ -77,12 +79,42 @@ function renderCountryCard(countries) {
     
     if (countries.length > 10) {
         console.log(`Опасность!!!Слишком много стран ${countries.length} подходит под ваш запрос. Сделайте его более специфичным!!!`);
+        // getErrorMessage();
+        // cardContainer.innerHTML = '';
+        error({
+    text: 'Too many matches found. Please enter a more specific query!',
+    width: '500px',
+    delay: 2000,
+    sticker: false,
+    icon: false,
+    closer: false,
+    stack: new Stack({
+    dir1: 'down', dir2: 'left',
+    firstpos1: 190, firstpos2: 50
+  })     
+})
     }
     }
+// function errorMessage() {
+//     error({
+//     text: 'Too many matches found. Please enter a more specific query!',
+//     width: '500px',
+//     delay: 2000,
+//     sticker: false,
+//     icon: false,
+//     closer: false,
+//     stack: new Stack({
+//     dir1: 'down', dir2: 'left',
+//     firstpos1: 190, firstpos2: 50 
+//   })     
+// })
+// } 
 
 function onFetchError (error) {
     console.log('error');
 };
+
+
 
 // --------pnotify
 
