@@ -4,6 +4,7 @@ import './sass/main.scss';
 import countryCardTpl from './templates/country-card.hbs';
 import countriesListTpl from './templates/countries-list.hbs';
 import '@pnotify/core/dist/BrightTheme.css';
+import API from './js/fetchCountries';
 
 const cardContainer = document.querySelector('.js-card-container');
 const searchForm = document.querySelector('.form-control');
@@ -44,18 +45,18 @@ cardContainer.innerHTML = '';
     console.log(searchQuery);
     // console.log(arrCountry);
 
-    fetchCountry(searchQuery)
+    API.fetchCountries(searchQuery)
         .then(renderCountryCard)
         .catch(onFetchError)
         // .finally(() => form.reset());  //не срабатывает
         // .finally(() => searchForm.reset());
 }
 
-function fetchCountry(countryName) {
-    return fetch(`https://restcountries.eu/rest/v2/name/${countryName}`).then(response => {
-    return response.json();
-    })
-}
+// function fetchCountry(countryName) {
+//     return fetch(`https://restcountries.eu/rest/v2/name/${countryName}`).then(response => {
+//     return response.json();
+//     })
+// }
 
 function renderCountryCard(countries) {
     console.log(...countries);
